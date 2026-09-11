@@ -1,20 +1,46 @@
 [
   {
-    "id": "demo-arcade",
-    "title": "Demo Arcade",
-    "description": "Starter game entry for testing the launcher.",
-    "url": "https://example.com",
-    "category": "Featured",
-    "icon": "A",
-    "accent": "#8b5cf6"
+    "id": "2048",
+    "title": "2048",
+    "description": "Classic sliding-number puzzle.",
+    "url": "https://alexdreamien.github.io/html5-2048/",
+    "category": "Puzzle",
+    "icon": "2048",
+    "art": "blocks",
+    "accent": "#c995ff",
+    "source": "https://github.com/AlexDreamien/html5-2048"
   },
   {
-    "id": "space-demo",
-    "title": "Space Demo",
-    "description": "Another starter entry for the library.",
-    "url": "https://example.com",
+    "id": "pacman",
+    "title": "Pac-Man",
+    "description": "Arcade maze chase with a level editor.",
+    "url": "https://lcov29.github.io/pacman/",
+    "category": "Arcade",
+    "icon": "PAC",
+    "art": "maze",
+    "accent": "#ffbd66",
+    "source": "https://github.com/lcov29/pacman"
+  },
+  {
+    "id": "pong",
+    "title": "Pong",
+    "description": "Classic paddle-versus-paddle arcade.",
+    "url": "https://saad2134.github.io/pong-game/",
+    "category": "Arcade",
+    "icon": "P",
+    "art": "pong",
+    "accent": "#62c8ff",
+    "source": "https://github.com/saad2134/pong-game"
+  },
+  {
+    "id": "snake",
+    "title": "Snake",
+    "description": "Classic snake with graphics and animation.",
+    "url": "https://skparab1.github.io/snakeg",
     "category": "Arcade",
     "icon": "S",
-    "accent": "#38bdf8"
+    "art": "snake",
+    "accent": "#62e39d",
+    "source": "https://github.com/Skparab1/snake"
   }
 ]
