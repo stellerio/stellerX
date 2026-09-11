@@ -1,8 +1,9 @@
 import "../styles/app.css";
 import "../animations/motion.css";
+import games from "../../data/games.json";
 
 const state = {
-  games: [],
+  games,
   selectedGame: null,
   sidebarOpen: true,
   query: ""
@@ -204,30 +205,6 @@ function renderGames() {
   });
 }
 
-async function loadGames() {
-  try {
-    const response = await fetch("/api/games");
-
-    if (!response.ok) {
-      throw new Error("Failed to load games");
-    }
-
-    const payload = await response.json();
-    state.games = Array.isArray(payload.games) ? payload.games : [];
-
-    renderGames();
-  } catch (error) {
-    console.error(error);
-
-    els.list.innerHTML = \`
-      <div class="empty-state error-state">
-        <strong>Backend unavailable</strong>
-        <span>Start the API server and refresh.</span>
-      </div>
-    \`;
-  }
-}
-
 function selectGame(id) {
   const game = state.games.find((item) => item.id === id);
 
@@ -339,4 +316,4 @@ window.addEventListener("resize", () => {
   }
 });
 
-loadGames();
+renderGames();
