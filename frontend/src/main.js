@@ -11,7 +11,7 @@ const state = {
 
 const app = document.querySelector("#app");
 
-app.innerHTML = \`
+app.innerHTML = `
   <div class="shell">
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-top">
@@ -102,7 +102,7 @@ app.innerHTML = \`
       <div class="mobile-overlay" id="mobileOverlay"></div>
     </main>
   </div>
-\`;
+`;
 
 const els = {
   sidebar: document.querySelector("#sidebar"),
@@ -148,22 +148,22 @@ function filteredGames() {
 function gameCard(game) {
   const active = state.selectedGame?.id === game.id ? "is-active" : "";
 
-  return \`
-    <button class="game-card \${active}" data-game-id="\${escapeHtml(game.id)}">
-      <span class="game-icon" style="--card-accent:\${escapeHtml(game.accent || "#8b5cf6")}">
-        \${escapeHtml(game.icon || game.title?.slice(0, 1) || "G")}
+  return `
+    <button class="game-card ${active}" data-game-id="${escapeHtml(game.id)}">
+      <span class="game-icon" style="--card-accent:${escapeHtml(game.accent || "#8b5cf6")}">
+        ${escapeHtml(game.icon || game.title?.slice(0, 1) || "G")}
       </span>
 
       <span class="game-card-copy">
-        <span class="game-card-title">\${escapeHtml(game.title)}</span>
+        <span class="game-card-title">${escapeHtml(game.title)}</span>
         <span class="game-card-description">
-          \${escapeHtml(game.description || "Ready to launch")}
+          ${escapeHtml(game.description || "Ready to launch")}
         </span>
       </span>
 
       <span class="game-card-arrow">›</span>
     </button>
-  \`;
+  `;
 }
 
 function renderGames() {
@@ -171,13 +171,13 @@ function renderGames() {
   els.count.textContent = state.games.length;
 
   if (!games.length) {
-    els.list.innerHTML = \`
+    els.list.innerHTML = `
       <div class="empty-state">
         <div class="empty-icon">⌕</div>
         <strong>No games found</strong>
         <span>Try a different search.</span>
       </div>
-    \`;
+    `;
     return;
   }
 
@@ -190,12 +190,12 @@ function renderGames() {
       (game) => (game.category || "Other") === category
     );
 
-    return \`
+    return `
       <div class="category-block">
-        <div class="category-label">\${escapeHtml(category)}</div>
-        \${categoryGames.map(gameCard).join("")}
+        <div class="category-label">${escapeHtml(category)}</div>
+        ${categoryGames.map(gameCard).join("")}
       </div>
-    \`;
+    `;
   }).join("");
 
   els.list.querySelectorAll("[data-game-id]").forEach((button) => {
