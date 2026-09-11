@@ -1,0 +1,20 @@
+[
+  {
+    "id": "demo-arcade",
+    "title": "Demo Arcade",
+    "description": "Starter game entry for testing the launcher.",
+    "url": "https://example.com",
+    "category": "Featured",
+    "icon": "A",
+    "accent": "#8b5cf6"
+  },
+  {
+    "id": "space-demo",
+    "title": "Space Demo",
+    "description": "Another starter entry for the library.",
+    "url": "https://example.com",
+    "category": "Arcade",
+    "icon": "S",
+    "accent": "#38bdf8"
+  }
+]
