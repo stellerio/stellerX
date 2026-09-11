@@ -1,0 +1,16 @@
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.welcome,
+.viewer,
+.game-card,
+.sidebar,
+.topbar {
+  animation: rise-in 420ms cubic-bezier(.2,.8,.2,1) both;
+}
+
+@keyframes rise-in {
+  from { opacity:0; transform:translateY(8px); }
+  to { opacity:1; transform:translateY(0); }
+}
