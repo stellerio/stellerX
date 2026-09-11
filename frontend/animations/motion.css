@@ -1,16 +1,33 @@
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to { transform:rotate(360deg); }
 }
 
-.welcome,
-.viewer,
-.game-card,
-.sidebar,
-.topbar {
-  animation: rise-in 420ms cubic-bezier(.2,.8,.2,1) both;
+@keyframes loader-breathe {
+  0%, 100% { transform:scale(.96); opacity:.72; }
+  50% { transform:scale(1.04); opacity:1; }
 }
 
 @keyframes rise-in {
   from { opacity:0; transform:translateY(8px); }
   to { opacity:1; transform:translateY(0); }
 }
+
+@keyframes float-soft {
+  0%, 100% { transform:translateY(0); }
+  50% { transform:translateY(-4px); }
+}
+
+.welcome { animation:rise-in 460ms cubic-bezier(.2,.8,.2,1) both; }
+.viewer { animation:rise-in 340ms cubic-bezier(.2,.8,.2,1) both; }
+.sidebar-top,
+.library-heading,
+.search-box,
+.library-divider,
+.game-list,
+.sidebar-footer {
+  animation:rise-in 420ms cubic-bezier(.2,.8,.2,1) both;
+}
+
+.welcome-orbit { animation:float-soft 4s ease-in-out infinite; }
+
+.game-card { animation:rise-in 280ms cubic-bezier(.2,.8,.2,1) both; }
