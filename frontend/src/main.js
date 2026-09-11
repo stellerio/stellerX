@@ -1,9 +1,9 @@
 import "../styles/app.css";
 import "../animations/motion.css";
-import games from "../../data/games.json";
+
 
 const state = {
-  games,
+  games: [],
   selectedGame: null,
   sidebarOpen: true,
   query: ""
@@ -316,4 +316,21 @@ window.addEventListener("resize", () => {
   }
 });
 
-renderGames();
+fetch("../data/games.json")
+  .then((response) => {
+    if (!response.ok) throw new Error("Failed to load game library");
+    return response.json();
+  })
+  .then((games) => {
+    state.games = Array.isArray(games) ? games : [];
+    renderGames();
+  })
+  .catch((error) => {
+    console.error(error);
+    els.list.innerHTML = `
+      <div class="empty-state error-state">
+        <strong>Game library unavailable</strong>
+        <span>Check data/games.json.</span>
+      </div>
+    `;
+  });
