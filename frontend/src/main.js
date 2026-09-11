@@ -5,7 +5,9 @@ const state = {
   games: [],
   selectedGame: null,
   sidebarOpen: true,
-  query: ""
+  query: "",
+  view: "home",
+  recent: JSON.parse(localStorage.getItem("stellerx-recent") || "[]")
 };
 
 const icons = {
@@ -17,8 +19,10 @@ const icons = {
   fullscreen: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4H4v4M16 4h4v4M20 16v4h-4M4 16v4h4"/></svg>',
   minimize: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg>',
   chevron: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>',
+  home: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 10 8-6 8 6v9H4z"/><path d="M9 19v-5h6v5"/></svg>',
   layers: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 4 8 4-8 4-8-4 8-4Z"/><path d="m4 12 8 4 8-4"/><path d="m4 16 8 4 8-4"/></svg>',
-  gamepad: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8h10a4 4 0 0 1 3.8 5.3l-1.1 3.2a2.5 2.5 0 0 1-4.5.3l-1-1.8H9.8l-1 1.8a2.5 2.5 0 0 1-4.5-.3l-1.1-3.2A4 4 0 0 1 7 8Z"/><path d="M7 11v4M5 13h4M16 12h.01M19 14h.01"/></svg>'
+  gamepad: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8h10a4 4 0 0 1 3.8 5.3l-1.1 3.2a2.5 2.5 0 0 1-4.5.3l-1-1.8H9.8l-1 1.8a2.5 2.5 0 0 1-4.5-.3l-1.1-3.2A4 4 0 0 1 7 8Z"/><path d="M7 11v4M5 13h4M16 12h.01M19 14h.01"/></svg>',
+  spark: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3Z"/><path d="m19 16 .8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16Z"/></svg>'
 };
 
 const app = document.querySelector("#app");
@@ -29,23 +33,36 @@ app.innerHTML = \`
       <div class="sidebar-glow"></div>
 
       <div class="sidebar-top">
-        <div class="brand">
+        <button class="brand brand-button" id="goHome" aria-label="Go home">
           <div class="brand-mark"><span class="brand-mark-core">S</span></div>
-          <div>
-            <div class="brand-name">StellerXlets</div>
-            <div class="brand-subtitle">Game launcher</div>
-          </div>
-        </div>
+          <span>
+            <span class="brand-name">StellerXlets</span>
+            <span class="brand-subtitle">Game launcher</span>
+          </span>
+        </button>
 
         <button class="icon-button mobile-toggle" id="closeSidebar" aria-label="Close menu">
           \${icons.close}
         </button>
       </div>
 
+      <nav class="main-nav" aria-label="Main navigation">
+        <button class="nav-item is-active" id="navHome">
+          <span class="nav-item-icon">\${icons.home}</span>
+          <span>Home</span>
+        </button>
+
+        <button class="nav-item" id="navLibrary">
+          <span class="nav-item-icon">\${icons.layers}</span>
+          <span>Library</span>
+          <span class="nav-count" id="navCount">0</span>
+        </button>
+      </nav>
+
       <div class="library-heading">
         <div class="library-heading-main">
           <span class="library-heading-icon">\${icons.layers}</span>
-          <span>Library</span>
+          <span>Games</span>
         </div>
         <span class="library-count" id="libraryCount">0</span>
       </div>
@@ -77,7 +94,7 @@ app.innerHTML = \`
           <div class="breadcrumbs">
             <span class="crumb-root">StellerXlets</span>
             <span class="crumb-divider">/</span>
-            <span id="currentTitle">Library</span>
+            <span id="currentTitle">Home</span>
           </div>
         </div>
 
@@ -93,23 +110,86 @@ app.innerHTML = \`
         <div class="ambient ambient-one"></div>
         <div class="ambient ambient-two"></div>
 
-        <div class="welcome" id="welcome">
-          <div class="welcome-orbit">
-            <div class="welcome-ring ring-one"></div>
-            <div class="welcome-ring ring-two"></div>
-            <div class="welcome-icon">\${icons.gamepad}</div>
+        <div class="home-screen" id="homeScreen">
+          <section class="hero-panel">
+            <div class="hero-copy">
+              <div class="hero-kicker">
+                <span class="kicker-icon">\${icons.spark}</span>
+                STELLERXLETS
+              </div>
+              <h1>Everything you play,<br><em>one place.</em></h1>
+              <p>Browse your library, jump into a game, and keep the whole experience inside one clean player.</p>
+
+              <div class="hero-actions">
+                <button class="primary-button" id="heroBrowse">
+                  <span>Browse games</span>
+                  \${icons.chevron}
+                </button>
+                <div class="hero-note">
+                  <span class="hero-note-dot"></span>
+                  <span>Ready to play</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="hero-visual" aria-hidden="true">
+              <div class="hero-grid"></div>
+              <div class="hero-orbit orbit-a"></div>
+              <div class="hero-orbit orbit-b"></div>
+              <div class="hero-console">
+                <div class="console-top">
+                  <span class="console-dot"></span>
+                  <span class="console-dot"></span>
+                  <span class="console-dot"></span>
+                </div>
+                <div class="console-screen">
+                  <span class="console-screen-glow"></span>
+                  <span class="console-symbol">\${icons.gamepad}</span>
+                </div>
+                <div class="console-foot">
+                  <span></span><span></span><span></span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="home-section">
+            <div class="section-heading">
+              <div>
+                <div class="section-eyebrow">FEATURED</div>
+                <h2>Pick your next game</h2>
+              </div>
+              <button class="ghost-link" id="homeSeeAll">View library \${icons.chevron}</button>
+            </div>
+
+            <div class="featured-grid" id="featuredGrid"></div>
+          </section>
+
+          <section class="home-section recent-section" id="recentSection">
+            <div class="section-heading compact">
+              <div>
+                <div class="section-eyebrow">RECENT</div>
+                <h2>Jump back in</h2>
+              </div>
+            </div>
+            <div class="recent-grid" id="recentGrid"></div>
+          </section>
+        </div>
+
+        <div class="library-screen hidden" id="libraryScreen">
+          <div class="library-header">
+            <div>
+              <div class="section-eyebrow">YOUR LIBRARY</div>
+              <h1>Games</h1>
+              <p id="librarySummary">Choose a title to start playing.</p>
+            </div>
+            <div class="library-header-badge">
+              <span class="status-dot"></span>
+              <span><strong id="libraryHeaderCount">0</strong> titles</span>
+            </div>
           </div>
 
-          <div class="welcome-eyebrow">STELLERXLETS</div>
-          <h1>Choose something to play</h1>
-          <p>Your library lives here. Pick a title and the player takes over.</p>
-
-          <div class="welcome-actions">
-            <button class="primary-button" id="welcomeMenu">
-              <span>Open library</span>
-              \${icons.chevron}
-            </button>
-          </div>
+          <div class="library-grid" id="libraryGrid"></div>
         </div>
 
         <div class="viewer hidden" id="viewer">
@@ -121,17 +201,11 @@ app.innerHTML = \`
                 <div class="current-game-description" id="viewerDescription">Ready</div>
               </div>
             </div>
-
             <div class="viewer-controls">
-              <button class="control-button" id="reloadFrame" title="Reload">
-                \${icons.reload}
-              </button>
-              <button class="control-button" id="fullscreenFrame" title="Fullscreen">
-                \${icons.fullscreen}
-              </button>
-              <button class="control-button" id="minimizeFrame" title="Minimize">
-                \${icons.minimize}
-              </button>
+              <button class="control-button" id="backHome" title="Home">\${icons.home}</button>
+              <button class="control-button" id="reloadFrame" title="Reload">\${icons.reload}</button>
+              <button class="control-button" id="fullscreenFrame" title="Fullscreen">\${icons.fullscreen}</button>
+              <button class="control-button" id="minimizeFrame" title="Minimize">\${icons.minimize}</button>
             </div>
           </div>
 
@@ -165,8 +239,16 @@ const els = {
   sidebar: document.querySelector("#sidebar"),
   list: document.querySelector("#gameList"),
   count: document.querySelector("#libraryCount"),
+  navCount: document.querySelector("#navCount"),
   search: document.querySelector("#gameSearch"),
-  welcome: document.querySelector("#welcome"),
+  home: document.querySelector("#homeScreen"),
+  featuredGrid: document.querySelector("#featuredGrid"),
+  recentSection: document.querySelector("#recentSection"),
+  recentGrid: document.querySelector("#recentGrid"),
+  libraryScreen: document.querySelector("#libraryScreen"),
+  libraryGrid: document.querySelector("#libraryGrid"),
+  librarySummary: document.querySelector("#librarySummary"),
+  libraryHeaderCount: document.querySelector("#libraryHeaderCount"),
   viewer: document.querySelector("#viewer"),
   frame: document.querySelector("#gameFrame"),
   stage: document.querySelector("#frameStage"),
@@ -176,7 +258,9 @@ const els = {
   currentTitle: document.querySelector("#currentTitle"),
   currentIcon: document.querySelector("#currentIcon"),
   overlay: document.querySelector("#mobileOverlay"),
-  openNewTab: document.querySelector("#openNewTab")
+  openNewTab: document.querySelector("#openNewTab"),
+  navHome: document.querySelector("#navHome"),
+  navLibrary: document.querySelector("#navLibrary")
 };
 
 function escapeHtml(value) {
@@ -188,9 +272,86 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
+function artMarkup(game, large = false) {
+  const type = game.art || "blocks";
+  const sizeClass = large ? "game-art-large" : "";
+
+  const shapes = {
+    blocks: \`
+      <div class="art-block block-a">2</div>
+      <div class="art-block block-b">0</div>
+      <div class="art-block block-c">4</div>
+      <div class="art-block block-d">8</div>
+    \`,
+    maze: \`
+      <div class="art-maze"><span></span><span></span><span></span><span></span></div>
+      <div class="art-pac"></div>
+    \`,
+    pong: \`
+      <div class="art-paddle left"></div>
+      <div class="art-paddle right"></div>
+      <div class="art-ball"></div>
+    \`,
+    snake: \`
+      <div class="art-snake"><span></span><span></span><span></span><span></span><i></i></div>
+      <div class="art-food"></div>
+    \`
+  };
+
+  return \`
+    <span class="game-art \${sizeClass}" style="--card-accent:\${escapeHtml(game.accent || "#8b5cf6")}">
+      <span class="game-art-noise"></span>
+      \${shapes[type] || shapes.blocks}
+    </span>
+  \`;
+}
+
+function gameCard(game, mode = "sidebar") {
+  if (mode === "featured") {
+    return \`
+      <button class="featured-card" data-game-id="\${escapeHtml(game.id)}" style="--featured-accent:\${escapeHtml(game.accent || "#8b5cf6")}">
+        \${artMarkup(game, true)}
+        <span class="featured-overlay"></span>
+        <span class="featured-copy">
+          <span class="featured-tag">\${escapeHtml(game.category || "Game")}</span>
+          <strong>\${escapeHtml(game.title)}</strong>
+          <span>\${escapeHtml(game.description || "Ready to launch")}</span>
+        </span>
+        <span class="featured-arrow">\${icons.chevron}</span>
+      </button>
+    \`;
+  }
+
+  if (mode === "library") {
+    return \`
+      <button class="library-card" data-game-id="\${escapeHtml(game.id)}" style="--featured-accent:\${escapeHtml(game.accent || "#8b5cf6")}">
+        \${artMarkup(game, true)}
+        <span class="library-card-body">
+          <span class="library-card-topline">
+            <span class="featured-tag">\${escapeHtml(game.category || "Game")}</span>
+            <span class="library-card-arrow">\${icons.chevron}</span>
+          </span>
+          <strong>\${escapeHtml(game.title)}</strong>
+          <span>\${escapeHtml(game.description || "Ready to launch")}</span>
+        </span>
+      </button>
+    \`;
+  }
+
+  return \`
+    <button class="game-card \${state.selectedGame?.id === game.id ? "is-active" : ""}" data-game-id="\${escapeHtml(game.id)}">
+      \${artMarkup(game)}
+      <span class="game-card-copy">
+        <span class="game-card-title">\${escapeHtml(game.title)}</span>
+        <span class="game-card-description">\${escapeHtml(game.description || "Ready to launch")}</span>
+      </span>
+      <span class="game-card-arrow">\${icons.chevron}</span>
+    </button>
+  \`;
+}
+
 function filteredGames() {
   const q = state.query.trim().toLowerCase();
-
   if (!q) return state.games;
 
   return state.games.filter((game) =>
@@ -200,30 +361,16 @@ function filteredGames() {
   );
 }
 
-function gameCard(game) {
-  const active = state.selectedGame?.id === game.id ? "is-active" : "";
-  const initials = String(game.title || "Game").slice(0, 1).toUpperCase();
-
-  return \`
-    <button class="game-card \${active}" data-game-id="\${escapeHtml(game.id)}">
-      <span class="game-art" style="--card-accent:\${escapeHtml(game.accent || "#8b5cf6")}">
-        <span class="game-art-shine"></span>
-        <span class="game-art-letter">\${escapeHtml(game.icon || initials)}</span>
-      </span>
-
-      <span class="game-card-copy">
-        <span class="game-card-title">\${escapeHtml(game.title)}</span>
-        <span class="game-card-description">\${escapeHtml(game.description || "Ready to launch")}</span>
-      </span>
-
-      <span class="game-card-arrow">\${icons.chevron}</span>
-    </button>
-  \`;
+function bindGameButtons(root) {
+  root.querySelectorAll("[data-game-id]").forEach((button) => {
+    button.addEventListener("click", () => selectGame(button.dataset.gameId));
+  });
 }
 
-function renderGames() {
+function renderSidebarGames() {
   const visible = filteredGames();
   els.count.textContent = state.games.length;
+  els.navCount.textContent = state.games.length;
 
   if (!visible.length) {
     els.list.innerHTML = \`
@@ -236,26 +383,80 @@ function renderGames() {
     return;
   }
 
-  const categories = [...new Set(
-    visible.map((game) => game.category || "Other")
-  )];
+  const categories = [...new Set(visible.map((game) => game.category || "Other"))];
 
-  els.list.innerHTML = categories.map((category) => {
-    const categoryGames = visible.filter(
-      (game) => (game.category || "Other") === category
-    );
+  els.list.innerHTML = categories.map((category) => \`
+    <div class="category-block">
+      <div class="category-label">\${escapeHtml(category)}</div>
+      \${visible.filter((game) => (game.category || "Other") === category).map(gameCard).join("")}
+    </div>
+  \`).join("");
 
-    return \`
-      <div class="category-block">
-        <div class="category-label">\${escapeHtml(category)}</div>
-        \${categoryGames.map(gameCard).join("")}
-      </div>
-    \`;
-  }).join("");
+  bindGameButtons(els.list);
+}
 
-  els.list.querySelectorAll("[data-game-id]").forEach((button) => {
-    button.addEventListener("click", () => selectGame(button.dataset.gameId));
-  });
+function renderHome() {
+  const featured = state.games.slice(0, 3);
+  els.featuredGrid.innerHTML = featured.length
+    ? featured.map((game) => gameCard(game, "featured")).join("")
+    : '<div class="empty-state"><strong>Your library is empty</strong><span>Add games to data/games.json.</span></div>';
+  bindGameButtons(els.featuredGrid);
+
+  const recentGames = state.recent
+    .map((id) => state.games.find((game) => game.id === id))
+    .filter(Boolean)
+    .slice(0, 3);
+
+  els.recentGrid.innerHTML = recentGames.length
+    ? recentGames.map((game) => gameCard(game, "sidebar")).join("")
+    : '<div class="recent-placeholder"><span class="placeholder-icon">\${icons.gamepad}</span><div><strong>No recent games yet</strong><span>Pick a title and it will appear here.</span></div></div>';
+  bindGameButtons(els.recentGrid);
+
+  els.recentSection.classList.toggle("hidden", !recentGames.length);
+}
+
+function renderLibrary() {
+  const visible = filteredGames();
+  els.libraryHeaderCount.textContent = visible.length;
+  els.librarySummary.textContent = state.query
+    ? \`Showing results for “\${state.query}”.\`
+    : "Choose a title to start playing.";
+
+  els.libraryGrid.innerHTML = visible.length
+    ? visible.map((game) => gameCard(game, "library")).join("")
+    : '<div class="empty-state library-empty"><strong>No games found</strong><span>Try another search.</span></div>';
+
+  bindGameButtons(els.libraryGrid);
+}
+
+function setView(view) {
+  state.view = view;
+
+  els.home.classList.toggle("hidden", view !== "home");
+  els.libraryScreen.classList.toggle("hidden", view !== "library");
+  els.viewer.classList.toggle("hidden", view !== "game");
+
+  els.navHome.classList.toggle("is-active", view === "home");
+  els.navLibrary.classList.toggle("is-active", view === "library");
+
+  els.currentTitle.textContent =
+    view === "home" ? "Home" :
+    view === "library" ? "Library" :
+    state.selectedGame?.title || "Game";
+
+  if (view === "home") renderHome();
+  if (view === "library") renderLibrary();
+
+  if (view !== "game") {
+    els.openNewTab.classList.add("is-disabled");
+  } else {
+    els.openNewTab.classList.remove("is-disabled");
+  }
+}
+
+function updateRecent(game) {
+  state.recent = [game.id, ...state.recent.filter((id) => id !== game.id)].slice(0, 6);
+  localStorage.setItem("stellerx-recent", JSON.stringify(state.recent));
 }
 
 function selectGame(id) {
@@ -263,20 +464,22 @@ function selectGame(id) {
   if (!game) return;
 
   state.selectedGame = game;
-  els.welcome.classList.add("hidden");
-  els.viewer.classList.remove("hidden");
+  updateRecent(game);
 
   els.title.textContent = game.title;
   els.description.textContent = game.description || "Ready to play";
   els.currentTitle.textContent = game.title;
-  els.currentIcon.textContent = game.icon || game.title.slice(0, 1);
-  els.currentIcon.style.background = game.accent || "#8b5cf6";
+  els.currentIcon.textContent = "";
+  els.currentIcon.innerHTML = artMarkup(game);
+  els.currentIcon.className = "game-mini-icon game-mini-art";
+  els.currentIcon.style.setProperty("--card-accent", game.accent || "#8b5cf6");
 
   els.loading.classList.remove("hidden");
   els.frame.classList.remove("is-loaded");
   els.frame.src = game.url;
 
-  renderGames();
+  setView("game");
+  renderSidebarGames();
   closeMobileSidebar();
 }
 
@@ -310,14 +513,36 @@ function toggleSidebar() {
   els.sidebar.classList.toggle("is-collapsed", !state.sidebarOpen);
 }
 
+function home() {
+  state.selectedGame = null;
+  setView("home");
+}
+
 document.querySelector("#toggleSidebar").addEventListener("click", toggleSidebar);
 document.querySelector("#closeSidebar").addEventListener("click", closeMobileSidebar);
-document.querySelector("#welcomeMenu").addEventListener("click", openSidebar);
+document.querySelector("#goHome").addEventListener("click", home);
+document.querySelector("#navHome").addEventListener("click", home);
+document.querySelector("#navLibrary").addEventListener("click", () => {
+  openSidebar();
+  setView("library");
+});
+document.querySelector("#heroBrowse").addEventListener("click", () => {
+  openSidebar();
+  setView("library");
+});
+document.querySelector("#homeSeeAll").addEventListener("click", () => {
+  openSidebar();
+  setView("library");
+});
+document.querySelector("#backHome").addEventListener("click", home);
+
 els.overlay.addEventListener("click", closeMobileSidebar);
 
 els.search.addEventListener("input", (event) => {
   state.query = event.target.value;
-  renderGames();
+  renderSidebarGames();
+
+  if (state.view === "library") renderLibrary();
 });
 
 els.frame.addEventListener("load", () => {
@@ -327,7 +552,6 @@ els.frame.addEventListener("load", () => {
 
 document.querySelector("#reloadFrame").addEventListener("click", () => {
   if (!state.selectedGame) return;
-
   els.loading.classList.remove("hidden");
   els.frame.classList.remove("is-loaded");
   els.frame.src = state.selectedGame.url;
@@ -365,7 +589,8 @@ fetch("../data/games.json")
   })
   .then((games) => {
     state.games = Array.isArray(games) ? games : [];
-    renderGames();
+    renderSidebarGames();
+    renderHome();
   })
   .catch((error) => {
     console.error(error);
