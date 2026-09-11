@@ -1,6 +1,7 @@
 const { defineConfig } = require("vite");
 
 module.exports = defineConfig({
+  base: "/stellerX/",
   root: "frontend",
   server: {
     port: 5173,
