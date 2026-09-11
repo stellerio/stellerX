@@ -27,7 +27,7 @@ const icons = {
 
 const app = document.querySelector("#app");
 
-app.innerHTML = \`
+app.innerHTML = `
   <div class="shell">
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-glow"></div>
@@ -42,18 +42,18 @@ app.innerHTML = \`
         </button>
 
         <button class="icon-button mobile-toggle" id="closeSidebar" aria-label="Close menu">
-          \${icons.close}
+          ${icons.close}
         </button>
       </div>
 
       <nav class="main-nav" aria-label="Main navigation">
         <button class="nav-item is-active" id="navHome">
-          <span class="nav-item-icon">\${icons.home}</span>
+          <span class="nav-item-icon">${icons.home}</span>
           <span>Home</span>
         </button>
 
         <button class="nav-item" id="navLibrary">
-          <span class="nav-item-icon">\${icons.layers}</span>
+          <span class="nav-item-icon">${icons.layers}</span>
           <span>Library</span>
           <span class="nav-count" id="navCount">0</span>
         </button>
@@ -61,14 +61,14 @@ app.innerHTML = \`
 
       <div class="library-heading">
         <div class="library-heading-main">
-          <span class="library-heading-icon">\${icons.layers}</span>
+          <span class="library-heading-icon">${icons.layers}</span>
           <span>Games</span>
         </div>
         <span class="library-count" id="libraryCount">0</span>
       </div>
 
       <label class="search-box">
-        \${icons.search}
+        ${icons.search}
         <input id="gameSearch" autocomplete="off" placeholder="Search your library..." />
       </label>
 
@@ -88,7 +88,7 @@ app.innerHTML = \`
       <header class="topbar">
         <div class="topbar-left">
           <button class="icon-button top-menu-button" id="toggleSidebar" aria-label="Toggle menu">
-            \${icons.menu}
+            ${icons.menu}
           </button>
 
           <div class="breadcrumbs">
@@ -100,7 +100,7 @@ app.innerHTML = \`
 
         <div class="top-actions">
           <button class="top-action" id="openNewTab">
-            \${icons.external}
+            ${icons.external}
             <span>Open</span>
           </button>
         </div>
@@ -114,7 +114,7 @@ app.innerHTML = \`
           <section class="hero-panel">
             <div class="hero-copy">
               <div class="hero-kicker">
-                <span class="kicker-icon">\${icons.spark}</span>
+                <span class="kicker-icon">${icons.spark}</span>
                 STELLERXLETS
               </div>
               <h1>Everything you play,<br><em>one place.</em></h1>
@@ -123,7 +123,7 @@ app.innerHTML = \`
               <div class="hero-actions">
                 <button class="primary-button" id="heroBrowse">
                   <span>Browse games</span>
-                  \${icons.chevron}
+                  ${icons.chevron}
                 </button>
                 <div class="hero-note">
                   <span class="hero-note-dot"></span>
@@ -144,7 +144,7 @@ app.innerHTML = \`
                 </div>
                 <div class="console-screen">
                   <span class="console-screen-glow"></span>
-                  <span class="console-symbol">\${icons.gamepad}</span>
+                  <span class="console-symbol">${icons.gamepad}</span>
                 </div>
                 <div class="console-foot">
                   <span></span><span></span><span></span>
@@ -159,7 +159,7 @@ app.innerHTML = \`
                 <div class="section-eyebrow">FEATURED</div>
                 <h2>Pick your next game</h2>
               </div>
-              <button class="ghost-link" id="homeSeeAll">View library \${icons.chevron}</button>
+              <button class="ghost-link" id="homeSeeAll">View library ${icons.chevron}</button>
             </div>
 
             <div class="featured-grid" id="featuredGrid"></div>
@@ -202,10 +202,10 @@ app.innerHTML = \`
               </div>
             </div>
             <div class="viewer-controls">
-              <button class="control-button" id="backHome" title="Home">\${icons.home}</button>
-              <button class="control-button" id="reloadFrame" title="Reload">\${icons.reload}</button>
-              <button class="control-button" id="fullscreenFrame" title="Fullscreen">\${icons.fullscreen}</button>
-              <button class="control-button" id="minimizeFrame" title="Minimize">\${icons.minimize}</button>
+              <button class="control-button" id="backHome" title="Home">${icons.home}</button>
+              <button class="control-button" id="reloadFrame" title="Reload">${icons.reload}</button>
+              <button class="control-button" id="fullscreenFrame" title="Fullscreen">${icons.fullscreen}</button>
+              <button class="control-button" id="minimizeFrame" title="Minimize">${icons.minimize}</button>
             </div>
           </div>
 
@@ -233,7 +233,7 @@ app.innerHTML = \`
       <div class="mobile-overlay" id="mobileOverlay"></div>
     </main>
   </div>
-\`;
+`;
 
 const els = {
   sidebar: document.querySelector("#sidebar"),
@@ -277,77 +277,77 @@ function artMarkup(game, large = false) {
   const sizeClass = large ? "game-art-large" : "";
 
   const shapes = {
-    blocks: \`
+    blocks: `
       <div class="art-block block-a">2</div>
       <div class="art-block block-b">0</div>
       <div class="art-block block-c">4</div>
       <div class="art-block block-d">8</div>
-    \`,
-    maze: \`
+    `,
+    maze: `
       <div class="art-maze"><span></span><span></span><span></span><span></span></div>
       <div class="art-pac"></div>
-    \`,
-    pong: \`
+    `,
+    pong: `
       <div class="art-paddle left"></div>
       <div class="art-paddle right"></div>
       <div class="art-ball"></div>
-    \`,
-    snake: \`
+    `,
+    snake: `
       <div class="art-snake"><span></span><span></span><span></span><span></span><i></i></div>
       <div class="art-food"></div>
-    \`
+    `
   };
 
-  return \`
-    <span class="game-art \${sizeClass}" style="--card-accent:\${escapeHtml(game.accent || "#8b5cf6")}">
+  return `
+    <span class="game-art ${sizeClass}" style="--card-accent:${escapeHtml(game.accent || "#8b5cf6")}">
       <span class="game-art-noise"></span>
-      \${shapes[type] || shapes.blocks}
+      ${shapes[type] || shapes.blocks}
     </span>
-  \`;
+  `;
 }
 
 function gameCard(game, mode = "sidebar") {
   if (mode === "featured") {
-    return \`
-      <button class="featured-card" data-game-id="\${escapeHtml(game.id)}" style="--featured-accent:\${escapeHtml(game.accent || "#8b5cf6")}">
-        \${artMarkup(game, true)}
+    return `
+      <button class="featured-card" data-game-id="${escapeHtml(game.id)}" style="--featured-accent:${escapeHtml(game.accent || "#8b5cf6")}">
+        ${artMarkup(game, true)}
         <span class="featured-overlay"></span>
         <span class="featured-copy">
-          <span class="featured-tag">\${escapeHtml(game.category || "Game")}</span>
-          <strong>\${escapeHtml(game.title)}</strong>
-          <span>\${escapeHtml(game.description || "Ready to launch")}</span>
+          <span class="featured-tag">${escapeHtml(game.category || "Game")}</span>
+          <strong>${escapeHtml(game.title)}</strong>
+          <span>${escapeHtml(game.description || "Ready to launch")}</span>
         </span>
-        <span class="featured-arrow">\${icons.chevron}</span>
+        <span class="featured-arrow">${icons.chevron}</span>
       </button>
-    \`;
+    `;
   }
 
   if (mode === "library") {
-    return \`
-      <button class="library-card" data-game-id="\${escapeHtml(game.id)}" style="--featured-accent:\${escapeHtml(game.accent || "#8b5cf6")}">
-        \${artMarkup(game, true)}
+    return `
+      <button class="library-card" data-game-id="${escapeHtml(game.id)}" style="--featured-accent:${escapeHtml(game.accent || "#8b5cf6")}">
+        ${artMarkup(game, true)}
         <span class="library-card-body">
           <span class="library-card-topline">
-            <span class="featured-tag">\${escapeHtml(game.category || "Game")}</span>
-            <span class="library-card-arrow">\${icons.chevron}</span>
+            <span class="featured-tag">${escapeHtml(game.category || "Game")}</span>
+            <span class="library-card-arrow">${icons.chevron}</span>
           </span>
-          <strong>\${escapeHtml(game.title)}</strong>
-          <span>\${escapeHtml(game.description || "Ready to launch")}</span>
+          <strong>${escapeHtml(game.title)}</strong>
+          <span>${escapeHtml(game.description || "Ready to launch")}</span>
         </span>
       </button>
-    \`;
+    `;
   }
 
-  return \`
-    <button class="game-card \${state.selectedGame?.id === game.id ? "is-active" : ""}" data-game-id="\${escapeHtml(game.id)}">
-      \${artMarkup(game)}
+  return `
+    <button class="game-card ${state.selectedGame?.id === game.id ? "is-active" : ""}" data-game-id="${escapeHtml(game.id)}">
+      ${artMarkup(game)}
       <span class="game-card-copy">
-        <span class="game-card-title">\${escapeHtml(game.title)}</span>
-        <span class="game-card-description">\${escapeHtml(game.description || "Ready to launch")}</span>
+        <span class="game-card-title">${escapeHtml(game.title)}</span>
+        <span class="game-card-description">${escapeHtml(game.description || "Ready to launch")}</span>
       </span>
-      <span class="game-card-arrow">\${icons.chevron}</span>
+      <span class="game-card-arrow">${icons.chevron}</span>
     </button>
-  \`;
+  `;
 }
 
 function filteredGames() {
@@ -373,24 +373,24 @@ function renderSidebarGames() {
   els.navCount.textContent = state.games.length;
 
   if (!visible.length) {
-    els.list.innerHTML = \`
+    els.list.innerHTML = `
       <div class="empty-state">
-        <div class="empty-icon">\${icons.search}</div>
+        <div class="empty-icon">${icons.search}</div>
         <strong>No games found</strong>
         <span>Try a different search.</span>
       </div>
-    \`;
+    `;
     return;
   }
 
   const categories = [...new Set(visible.map((game) => game.category || "Other"))];
 
-  els.list.innerHTML = categories.map((category) => \`
+  els.list.innerHTML = categories.map((category) => `
     <div class="category-block">
-      <div class="category-label">\${escapeHtml(category)}</div>
-      \${visible.filter((game) => (game.category || "Other") === category).map(gameCard).join("")}
+      <div class="category-label">${escapeHtml(category)}</div>
+      ${visible.filter((game) => (game.category || "Other") === category).map(gameCard).join("")}
     </div>
-  \`).join("");
+  `).join("");
 
   bindGameButtons(els.list);
 }
@@ -409,7 +409,7 @@ function renderHome() {
 
   els.recentGrid.innerHTML = recentGames.length
     ? recentGames.map((game) => gameCard(game, "sidebar")).join("")
-    : '<div class="recent-placeholder"><span class="placeholder-icon">\${icons.gamepad}</span><div><strong>No recent games yet</strong><span>Pick a title and it will appear here.</span></div></div>';
+    : '<div class="recent-placeholder"><span class="placeholder-icon">${icons.gamepad}</span><div><strong>No recent games yet</strong><span>Pick a title and it will appear here.</span></div></div>';
   bindGameButtons(els.recentGrid);
 
   els.recentSection.classList.toggle("hidden", !recentGames.length);
@@ -419,7 +419,7 @@ function renderLibrary() {
   const visible = filteredGames();
   els.libraryHeaderCount.textContent = visible.length;
   els.librarySummary.textContent = state.query
-    ? \`Showing results for “\${state.query}”.\`
+    ? `Showing results for “${state.query}”.`
     : "Choose a title to start playing.";
 
   els.libraryGrid.innerHTML = visible.length
@@ -594,10 +594,10 @@ fetch("../data/games.json")
   })
   .catch((error) => {
     console.error(error);
-    els.list.innerHTML = \`
+    els.list.innerHTML = `
       <div class="empty-state error-state">
         <strong>Game library unavailable</strong>
         <span>Check data/games.json.</span>
       </div>
-    \`;
+    `;
   });
